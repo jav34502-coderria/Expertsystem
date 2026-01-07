@@ -1,5 +1,5 @@
 #include<iostream>
-#include <vector> 
+#include<vector> 
 #include <string>
 using namespace std;
 
@@ -10,13 +10,14 @@ struct Fact {
 };
 
 vector<Fact> factBase;
-// ================= USER STRUCTURES =================
+//  USER STRUCTURES 
 struct Patient {
     string username;
     string password;
 };
 
 vector<Patient> patients;
+bool isAdminMode = false;
 
 // ADMIN 
 string adminUser = "admin";
@@ -68,6 +69,7 @@ int main() {
 
         case 2:
             if (patientLogin()) {
+                 isAdminMode = false; 
                 cout << "\n--- ENTER PATIENT DATA ---\n";
                 inputFacts();
                 runExpertSystem();
@@ -76,6 +78,7 @@ int main() {
 
         case 3:
             if (adminLogin()) {
+                isAdminMode = true;
                 int adminChoice;
                 bool adminMenu = true;
 
@@ -100,9 +103,11 @@ int main() {
                     }
                     else if (adminChoice == 4) {
                         adminMenu = false;
+                         isAdminMode = false; 
                         cout << "Admin Logged Out\n";
                     }
                     else {
+
                         cout << "Invalid Admin Option\n";
                     }
                 }
@@ -194,21 +199,24 @@ void runExpertSystem() {
     bool AGG = getFact("AGG");
 
     cout << "\n  DIAGNOSTIC REASONING  \n";
+ if (isAdminMode) {
     formalInference();
+}
+
 
 //PHASE DETECTION 
      
     string phase;
     if (H || D || S)
-        phase = "ACTIVE(starting)";
+        phase = "ACTIVE()";
     else if (N || W)
-        phase = "PRODROMAL(moderate)";
+        phase = "PRODROMAL";
     else
-        phase = "RESIDUAL(severe)";
+        phase = "RESIDUAL";
 
     cout << "Detected Phase: " << phase << endl;
 
-    //   SEVERITY SCORING
+    //    severity scoring
     int score = 0;
     if (H) score += 3;
     if (D) score += 3;
@@ -220,11 +228,23 @@ void runExpertSystem() {
 
      //  MUTUAL EXCLUSIVITY CHECK
     int conflictCount = (B ? 1 : 0) + (DEP ? 1 : 0) + (SUB ? 1 : 0);
-    if (conflictCount > 1) {
-        cout << " LOGICAL CONFLICT: Multiple primary disorders detected\n";
-        cout << "Please reassess patient data\n";
-        return;
-    }
+  if (conflictCount > 1) {
+    explain("Conflicting diagnostic categories detected");
+
+    cout << "\nPROVISIONAL ASSESSMENT RESULT\n";
+    cout << "- Psychotic symptoms detected\n";
+
+    if (B || DEP)
+        cout << "- Mood-related symptoms also present\n";
+
+    double confidence = (score / 11.0) * 100;
+    cout << "Diagnostic Confidence: " << confidence << "%\n";
+
+    cout << "Final diagnosis deferred due to logical conflict\n";
+    cout << "Clinical reassessment recommended\n";
+    return;
+}
+
      //  CORE DSM LOGIC
     int symptomCount = H + D + S + N;
 
@@ -275,9 +295,23 @@ void runExpertSystem() {
         cout << "\nPROVISIONAL / BRIEF PSYCHOTIC DISORDER\n";
     }
     else {
-        explain("Insufficient diagnostic criteria");
-        cout << "\nNO CONFIRMED PSYCHOTIC DISORDER\n";
+    explain("Full criteria not met");
+
+    cout << "\nPROVISIONAL RESULT:\n";
+
+    if (score >= 5) {
+        cout << "MODERATE TO HIGH RISK OF PSYCHOSIS\n";
     }
+    else if (score >= 3) {
+        cout << "LOW TO MODERATE RISK OF PSYCHOSIS\n";
+    }
+    else {
+        cout << "MINIMAL PSYCHOTIC FEATURES\n";
+    }
+
+    cout << "Further clinical evaluation recommended\n";
+}
+
 }
   // FORMAL INFERENCE ENGINE
 void formalInference() {
