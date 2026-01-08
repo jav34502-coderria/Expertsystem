@@ -1,29 +1,17 @@
-# Expert System (C++)
+ Intelligent Medical Expert System – C++
 
- Project Overview
-This project is a simple "psycho logic decision system analyzer" developed in **C++**.  
-It demonstrates the basic working of an expert system using:
-- Facts
-- Rules
-- User interaction
-- Decision making
+This project demonstrates how a rule-based expert system can
+handle overlapping disorders and incorrect patient data using
+logical inference.
 
-The system asks questions from the user and provides results based on predefined rules.
+. Resolves conflicting inputs
+. Handles overlapping psychiatric conditions
+.Applies exclusion and resolution rules
+. Prevents incorrect diagnoses
 
-## Features
-- User login system
-- Admin login system
-- Fact base and rule base
-- Decision making using rules
-- Console based interface
+ GitHub Repository:
+https://github.com/jav34502-coderria/Expertsystem
 
----
-
-## Technologies Used
-- Language: C++
-- Compiler: Any C++ compiler (GCC / Dev-C++ / CodeBlocks)
-
-## Author
-Name: Javeria  
-Course: Computer Science  
-
+REgards:
+javeria
+collabrative with umaima.
